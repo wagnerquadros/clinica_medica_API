@@ -1,34 +1,26 @@
-package com.wagnerquadros.clinicamedica.entity.medico.dto;
+package com.wagnerquadros.clinicamedica.entity.paciente.dto;
 
 import com.wagnerquadros.clinicamedica.entity.endereco.dto.EnderecoDto;
-import com.wagnerquadros.clinicamedica.entity.medico.Especialidade;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public record CadastroMedicoDto(
-
+public record CadastroPacienteDto(
         @NotBlank
         String nome,
 
-        @NotBlank
-        @Email
+        @NotBlank @Email
         String email,
 
         @NotBlank
         String telefone,
 
-        @NotBlank
-        @Pattern(regexp = "\\d{4,6}")
-        String crm,
+        @NotBlank @Pattern(regexp = "\\d{3}\\.?\\d{3}\\.?\\d{3}\\-?\\d{2}")
+        String cpf,
 
-        @NotNull
-        Especialidade especialidade,
-
-        @NotNull
-        @Valid
+        @NotNull @Valid
         EnderecoDto endereco
 ) {
 }

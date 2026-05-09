@@ -28,4 +28,27 @@ public class Endereco {
         this.cidade = dto.cidade();
         this.uf = dto.uf();
     }
+
+    public void atualizarInformacoes(EnderecoDto dto) {
+        if (dto.logradouro() != null)
+            this.logradouro = dto.logradouro();
+
+        if (dto.bairro() != null)
+            this.bairro = dto.bairro();
+
+        if (dto.cep() != null)
+            this.cep = dto.cep();
+
+        if (dto.cidade() != null)
+            this.cidade = dto.cidade();
+
+        if (dto.uf() != null)
+            this.uf = dto.uf();
+
+        if (dto.numero() != null)
+            this.numero = dto.numero();
+
+        if (dto.complemento() != null)
+            this.complemento = dto.complemento();
+    }
 }
