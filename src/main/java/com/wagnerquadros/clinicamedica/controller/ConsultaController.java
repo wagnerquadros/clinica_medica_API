@@ -2,7 +2,6 @@ package com.wagnerquadros.clinicamedica.controller;
 
 import com.wagnerquadros.clinicamedica.entity.consulta.dto.AgendamentoConsultaDto;
 import com.wagnerquadros.clinicamedica.entity.consulta.dto.CancelamentoConsultaDto;
-import com.wagnerquadros.clinicamedica.entity.consulta.dto.DetalhamentoConsultaDto;
 import com.wagnerquadros.clinicamedica.service.ConsultaService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;

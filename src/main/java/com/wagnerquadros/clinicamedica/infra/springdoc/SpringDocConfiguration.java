@@ -20,7 +20,8 @@ public class SpringDocConfiguration {
                                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
                 .info(new Info()
                         .title("Clínica Médica")
-                        .description("API Rest contendo as funcionalidades de CRUD de médicos e de pacientes, além de agendamento e cancelamento de consultas")
+                        .description("API Rest contendo as funcionalidades de CRUD de médicos e de pacientes, " +
+                                "além de agendamento e cancelamento de consultas")
                         .contact(new Contact()
                                 .name("Wagner Quadros")
                                 .email("wagnerquadros@email.com")));

@@ -6,7 +6,6 @@ import com.wagnerquadros.clinicamedica.entity.medico.dto.AtualizacaoMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.CadastroMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.DetalhamentoMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.ListagemMedicoDto;
-import com.wagnerquadros.clinicamedica.entity.paciente.dto.DetalhamentoPacienteDto;
 import com.wagnerquadros.clinicamedica.repository.MedicoRepository;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/medicos")
@@ -43,23 +40,23 @@ public class MedicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ListagemMedicoDto>> listar (@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao){
-        var page =  repository.findAllByAtivoTrue(paginacao).map(ListagemMedicoDto::new);
+    public ResponseEntity<Page<ListagemMedicoDto>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+        var page = repository.findAllByAtivoTrue(paginacao).map(ListagemMedicoDto::new);
         return ResponseEntity.ok(page);
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid AtualizacaoMedicoDto dto){
+    public ResponseEntity atualizar(@RequestBody @Valid AtualizacaoMedicoDto dto) {
         var medico = repository.getReferenceById(dto.id());
         medico.atualizarInformacoes(dto);
 
-        return  ResponseEntity.ok(new DetalhamentoMedicoDto(medico));
+        return ResponseEntity.ok(new DetalhamentoMedicoDto(medico));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity excluir (@PathVariable Long id) {
+    public ResponseEntity excluir(@PathVariable Long id) {
         var medico = repository.getReferenceById(id);
         medico.excluir();
 
