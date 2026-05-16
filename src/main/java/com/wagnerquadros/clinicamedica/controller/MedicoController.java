@@ -8,6 +8,7 @@ import com.wagnerquadros.clinicamedica.entity.medico.dto.DetalhamentoMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.ListagemMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.paciente.dto.DetalhamentoPacienteDto;
 import com.wagnerquadros.clinicamedica.repository.MedicoRepository;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/medicos")
+@SecurityRequirement(name = "bearer-key")
 public class MedicoController {
 
     @Autowired
