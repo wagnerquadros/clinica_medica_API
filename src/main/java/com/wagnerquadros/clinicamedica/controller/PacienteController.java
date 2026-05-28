@@ -7,6 +7,7 @@ import com.wagnerquadros.clinicamedica.entity.paciente.dto.CadastroPacienteDto;
 import com.wagnerquadros.clinicamedica.entity.paciente.dto.DetalhamentoPacienteDto;
 import com.wagnerquadros.clinicamedica.entity.paciente.dto.ListagemPacienteDto;
 import com.wagnerquadros.clinicamedica.repository.PacienteRepository;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,8 @@ public class PacienteController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadstrar(@RequestBody @Valid CadastroPacienteDto dto,
+    @Operation(summary = "Cadastrar paciente")
+    public ResponseEntity<DetalhamentoPacienteDto> cadstrar(@RequestBody @Valid CadastroPacienteDto dto,
                                    UriComponentsBuilder uriBuilder) {
 
         var paciente = new Paciente(dto);
@@ -40,6 +42,7 @@ public class PacienteController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar pacientes")
     public ResponseEntity<Page<ListagemPacienteDto>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
         var page = repository.findAllByAtivoTrue(paginacao).map(ListagemPacienteDto::new);
         return ResponseEntity.ok(page);
@@ -47,7 +50,8 @@ public class PacienteController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid AtualizacaoPacienteDto dto) {
+    @Operation(summary = "Atualizar paciente")
+    public ResponseEntity<DetalhamentoPacienteDto> atualizar(@RequestBody @Valid AtualizacaoPacienteDto dto) {
         var paciente = repository.getReferenceById(dto.id());
         paciente.atualizarInformacoes(dto);
         return ResponseEntity.ok(new DetalhamentoPacienteDto(paciente));
@@ -55,14 +59,16 @@ public class PacienteController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity excluir(@PathVariable Long id) {
+    @Operation(summary = "Excluir logicamente paciente")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
         var paciente = repository.getReferenceById(id);
         paciente.excluir();
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity detalhar(@PathVariable Long id) {
+    @Operation(summary = "Detalhar dados de um paciente")
+    public ResponseEntity<DetalhamentoPacienteDto> detalhar(@PathVariable Long id) {
         var paciente = repository.getReferenceById(id);
         return ResponseEntity.ok(new DetalhamentoPacienteDto(paciente));
     }

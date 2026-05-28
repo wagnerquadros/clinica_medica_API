@@ -2,7 +2,9 @@ package com.wagnerquadros.clinicamedica.controller;
 
 import com.wagnerquadros.clinicamedica.entity.consulta.dto.AgendamentoConsultaDto;
 import com.wagnerquadros.clinicamedica.entity.consulta.dto.CancelamentoConsultaDto;
+import com.wagnerquadros.clinicamedica.entity.consulta.dto.DetalhamentoConsultaDto;
 import com.wagnerquadros.clinicamedica.service.ConsultaService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -20,15 +22,17 @@ public class ConsultaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity agendar(@RequestBody @Valid AgendamentoConsultaDto dto) {
+    @Operation(summary = "Agendar consulta médica")
+    public ResponseEntity<DetalhamentoConsultaDto> agendar(@RequestBody @Valid AgendamentoConsultaDto dto) {
 
-        var consultaDto = consultaService.agendar(dto);
-        return ResponseEntity.ok(consultaDto);
+        var detalhamentoConsultaDto = consultaService.agendar(dto);
+        return ResponseEntity.ok(detalhamentoConsultaDto);
     }
 
     @DeleteMapping
     @Transactional
-    public ResponseEntity cancelar(@RequestBody @Valid CancelamentoConsultaDto dto) {
+    @Operation(summary = "Cancelar consulta médica")
+    public ResponseEntity<Void> cancelar(@RequestBody @Valid CancelamentoConsultaDto dto) {
         consultaService.cancelar(dto);
         return ResponseEntity.noContent().build();
     }

@@ -1,10 +1,8 @@
 package com.wagnerquadros.clinicamedica.entity.usuario;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +26,7 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Override
-    public String getUsername() {
+    public @NonNull String getUsername() {
         return login;
     }
 
