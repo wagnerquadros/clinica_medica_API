@@ -59,6 +59,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
     }
 
+    @ExceptionHandler(MedicoNaoEncontradoException.class)
+    public ResponseEntity<Void> tratarMedicoNaoEncontradoException(MedicoNaoEncontradoException ex) {
+        return ResponseEntity.notFound().build();
+    }
+
     private record DadosErroValidacao(String campo, String mensagem) {
         public DadosErroValidacao(FieldError erro) {
             this(erro.getField(), erro.getDefaultMessage());

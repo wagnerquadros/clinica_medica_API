@@ -7,6 +7,7 @@ import com.wagnerquadros.clinicamedica.entity.medico.dto.CadastroMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.DetalhamentoMedicoDto;
 import com.wagnerquadros.clinicamedica.entity.medico.dto.ListagemMedicoDto;
 import com.wagnerquadros.clinicamedica.repository.MedicoRepository;
+import com.wagnerquadros.clinicamedica.service.MedicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -25,54 +26,42 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class MedicoController {
 
     @Autowired
-    private MedicoRepository repository;
+    private MedicoService medicoService;
 
     @PostMapping
-    @Transactional
     @Operation(summary = "Cadastrar médico")
     public ResponseEntity<DetalhamentoMedicoDto> cadastrar(@RequestBody @Valid CadastroMedicoDto dto,
                                     UriComponentsBuilder uriBuilder) {
 
-        var medico = new Medico(dto);
-        repository.save(medico);
+        var medicoDto = medicoService.cadastrar(dto);
+        var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medicoDto.id()).toUri();
 
-        var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DetalhamentoMedicoDto(medico));
+        return ResponseEntity.created(uri).body(medicoDto);
     }
 
     @GetMapping
     @Operation(summary = "Listar médicos")
-    public ResponseEntity<Page<ListagemMedicoDto>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao).map(ListagemMedicoDto::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<Page<ListagemMedicoDto>> listar(@PageableDefault(size = 10, sort = {"nome"})
+                                                              Pageable paginacao) {
+        return ResponseEntity.ok(medicoService.listar(paginacao));
     }
 
     @PutMapping
-    @Transactional
     @Operation(summary = "Atualizar médico")
     public ResponseEntity<DetalhamentoMedicoDto> atualizar(@RequestBody @Valid AtualizacaoMedicoDto dto) {
-        var medico = repository.getReferenceById(dto.id());
-        medico.atualizarInformacoes(dto);
-
-        return ResponseEntity.ok(new DetalhamentoMedicoDto(medico));
+        return ResponseEntity.ok(medicoService.atualizar(dto));
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     @Operation(summary = "Excluir logicamente um médico")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        var medico = repository.getReferenceById(id);
-        medico.excluir();
-
+        medicoService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Detalhar dados de um médico")
     public ResponseEntity<DetalhamentoMedicoDto> detalhar(@PathVariable Long id) {
-
-        var medico = repository.getReferenceById(id);
-        return ResponseEntity.ok(new DetalhamentoMedicoDto(medico));
+        return ResponseEntity.ok(medicoService.detalhar(id));
     }
 }
